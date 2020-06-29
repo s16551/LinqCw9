@@ -291,14 +291,8 @@ namespace LinqCwiczenia
             var maxValue = (from emp in Emps
                        select emp).ToList().Max(emp => emp.Salary);
 
-            var res = (from emp in Emps                  
-                       where emp.Salary == maxValue 
-                       select emp).ToList();
-
-
-
-
-            ResultsDataGridView.DataSource = res;
+            WynikTextBox.Text = maxValue.ToString();
+           
         }
 
         /// <summary>
@@ -314,7 +308,7 @@ namespace LinqCwiczenia
                        select emp).ToList();
 
            
-            //ResultsDataGridView.DataSource = result;
+            ResultsDataGridView.DataSource = res;
         }
 
         /// <summary>
@@ -323,7 +317,12 @@ namespace LinqCwiczenia
         private void Przyklad5Button_Click(object sender, EventArgs e)
         {
 
-            //ResultsDataGridView.DataSource = result;
+            var result = (from x in Emps
+                        let Nazwisko = x.Ename
+                        let Praca = x.Job
+                        select new {Nazwisko, Praca }).ToList();
+
+            ResultsDataGridView.DataSource = result;
         }
 
         /// <summary>
@@ -334,7 +333,12 @@ namespace LinqCwiczenia
         private void Przyklad6Button_Click(object sender, EventArgs e)
         {
 
-            //ResultsDataGridView.DataSource = result;
+             var res = (from emp in Emps
+                       join dept in Depts on emp.Deptno equals dept.Deptno 
+                       select new { emp.Ename, emp.Job, dept.Dname }).ToList();
+
+
+            ResultsDataGridView.DataSource = res;
         }
 
         /// <summary>
@@ -342,8 +346,11 @@ namespace LinqCwiczenia
         /// </summary>
         private void Przyklad7Button_Click(object sender, EventArgs e)
         {
+            var result = (from emp in Emps                
+                       group emp by emp.Job into grp
+                       select new { Praca = grp.Key, LiczbaPracownikow = grp.Count() }).ToList();
 
-            //ResultsDataGridView.DataSource = result;
+            ResultsDataGridView.DataSource = result;
         }
 
         /// <summary>
@@ -352,12 +359,12 @@ namespace LinqCwiczenia
         /// </summary>
         private void Przyklad8Button_Click(object sender, EventArgs e)
         {
-            /*
-            if (LINQ)
+
+
+            if (Emps.Any(x=> x.Job == "Backend programmer"))
             {
                 WynikTextBox.Text = "Backend programmer istnieje w kolekcji";
             }
-             */
         }
 
         /// <summary>
@@ -367,7 +374,12 @@ namespace LinqCwiczenia
         private void Przyklad9Button_Click(object sender, EventArgs e)
         {
 
-            //ResultsDataGridView.DataSource = result;
+            var result = (from emp in Emps
+                          where emp.Job == "Frontend programmer"
+                          orderby emp.HireDate descending
+                          select emp).FirstOrDefault();
+
+            ResultsDataGridView.DataSource = result;
         }
 
         /// <summary>
@@ -377,8 +389,11 @@ namespace LinqCwiczenia
         /// </summary>
         private void Przyklad10Button_Click(object sender, EventArgs e)
         {
+            var result = (from emp in Emps
+                          select new { emp.Ename, emp.Job, emp.HireDate }).ToList();
 
-            //ResultsDataGridView.DataSource = result;
+
+            ResultsDataGridView.DataSource = result;
         }
 
 
